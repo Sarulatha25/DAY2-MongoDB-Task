@@ -1,0 +1,224 @@
+// Create Database
+use EcommerceDB
+
+// Create Collection
+db.createCollection("products")
+
+// Insert Documents
+db.products.insertMany([
+{
+ name: "iPhone 14",
+ category: "Electronics",
+ price: 75000,
+ stock: 25,
+ brand: "Apple"
+},
+{
+ name: "Samsung Galaxy S22",
+ category: "Electronics",
+ price: 65000,
+ stock: 30,
+ brand: "Samsung"
+},
+{
+ name: "Dell Laptop",
+ category: "Computers",
+ price: 55000,
+ stock: 15,
+ brand: "Dell"
+},
+{
+ name: "HP Pavilion Laptop",
+ category: "Computers",
+ price: 50000,
+ stock: 12,
+ brand: "HP"
+},
+{
+ name: "Nike Shoes",
+ category: "Fashion",
+ price: 5000,
+ stock: 50,
+ brand: "Nike"
+},
+{
+ name: "Adidas T-shirt",
+ category: "Fashion",
+ price: 1500,
+ stock: 80,
+ brand: "Adidas"
+},
+{
+ name: "Sony Headphones",
+ category: "Electronics",
+ price: 3000,
+ stock: 40,
+ brand: "Sony"
+},
+{
+ name: "Wooden Dining Table",
+ category: "Furniture",
+ price: 20000,
+ stock: 5,
+ brand: "IKEA"
+},
+{
+ name: "Office Chair",
+ category: "Furniture",
+ price: 7000,
+ stock: 20,
+ brand: "Godrej"
+},
+{
+ name: "Bluetooth Speaker",
+ category: "Electronics",
+ price: 2500,
+ stock: 60,
+ brand: "JBL"
+}
+])
+
+// 1. Find all products
+db.products.find()
+
+// 2. Display all products in formatted structure
+db.products.find().pretty()
+
+// 3. Find single product using product name
+db.products.findOne({name: "iPhone 14"})
+
+// 4. Find products where category is Electronics
+db.products.find({category: "Electronics"})
+
+// 5. Find products where price < 5000
+db.products.find({price: {$lt: 5000}})
+
+// 6. Find products where price <= 5000
+db.products.find({price: {$lte: 5000}})
+
+// 7. Find products where price > 5000
+db.products.find({price: {$gt: 5000}})
+
+// 8. Find products where price >= 5000
+db.products.find({price: {$gte: 5000}})
+
+// 9. Find products where price != 5000
+db.products.find({price: {$ne: 5000}})
+
+// 10. Find products where price in [1000,2000,5000]
+db.products.find({price: {$in: [1000,2000,5000]}})
+
+// 11. Find products where price not in [1000,2000,5000]
+db.products.find({price: {$nin: [1000,2000,5000]}})
+
+// 12. Find products where category is Electronics AND price is 5000
+db.products.find({
+ category: "Electronics",
+ price: 5000
+})
+
+// 13. Find products where category is Electronics OR brand is Apple
+db.products.find({
+ $or: [
+   {category: "Electronics"},
+   {brand: "Apple"}
+ ]
+})
+
+// 14. Find products where price > 5000 OR brand is Samsung
+db.products.find({
+ $or: [
+   {price: {$gt: 5000}},
+   {brand: "Samsung"}
+ ]
+})
+
+// 15. Find products where price between 5000 and 20000
+db.products.find({
+ price: {$gte: 5000, $lte: 20000}
+})
+
+// 16. Find products where price is NOT greater than 5000
+db.products.find({
+ price: {$not: {$gt: 5000}}
+})
+
+Update Operations:
+
+// 1. Update product name using specific product ID
+db.products.updateOne(
+ {_id: ObjectId("6a0fe768388f7054c5c5c918")},
+ {$set: {name: "iPhone 14 Pro"}}
+)
+
+// 2. Update stock for products where price < 5000
+db.products.updateMany(
+ {price: {$lt: 5000}},
+ {$set: {stock: 100}}
+)
+
+// 3. Update price for one product meeting condition
+db.products.updateOne(
+ {name: "Nike Shoes"},
+ {$set: {price: 6000}}
+)
+
+// 4. Update stock for multiple Electronics products
+db.products.updateMany(
+ {category: "Electronics"},
+ {$set: {stock: 75}}
+)
+
+// 5. Replace entire product document
+db.products.replaceOne(
+ {name: "Office Chair"},
+ {
+   name: "Gaming Chair",
+   category: "Furniture",
+   price: 12000,
+   stock: 10,
+   brand: "GreenSoul"
+ }
+)
+
+Delete Operations:
+
+// 1. Delete a product using name
+db.products.deleteOne({name: "Nike Shoes"})
+
+// 2. Delete one product where price < 2000
+db.products.deleteOne({price: {$lt: 2000}})
+
+// 3. Delete all products from collection
+db.products.deleteMany({})
+
+Filtering:
+
+// 1. Display only product name and price
+db.products.find(
+ {},
+ {name: 1, price: 1}
+)
+
+// 2. Display product name and price without ID
+db.products.find(
+ {},
+ {_id: 0, name: 1, price: 1}
+)
+
+Limiting:
+
+// 1. Display first 5 products
+db.products.find().limit(5)
+
+// 2. Skip first 5 products and display next 5
+db.products.find().skip(5).limit(5)
+
+Sorting:
+
+// 1. Sort products by price ascending
+db.products.find().sort({price: 1})
+
+// 2. Sort products by price descending
+db.products.find().sort({price: -1})
+
